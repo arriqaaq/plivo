@@ -1,0 +1,1 @@
+web: gunicorn speak:app --log-file -
