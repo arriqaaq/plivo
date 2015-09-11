@@ -11,14 +11,13 @@ Done=-1
 app = Flask(__name__)
 auth_id = "MANDCZZTUWZDUWNTBHMZ"
 body = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3"
-
+engine=create_engine('sqlite:///call.db')
+Base.metadata.bind=engine
+DBSession=sessionmaker(bind=engine)
+session=DBSession()    
+    
 @app.route("/forward/", methods=['GET','POST'])
 def forward():
-    engine=create_engine('sqlite:///call.db')
-    Base.metadata.bind=engine
-    DBSession=sessionmaker(bind=engine)
-    session=DBSession()
-
     # Generate a Dial XML to forward an incoming call.
 
     # The phone number of the person calling your Plivo number,
@@ -58,10 +57,6 @@ def forward():
 
 @app.route("/hangup/", methods=['GET','POST'])
 def hangup():
-    engine=create_engine('sqlite:///call.db')
-    Base.metadata.bind=engine
-    DBSession=sessionmaker(bind=engine)
-    session=DBSession()    
     from_number = request.args.get('From')
     call_status = request.args.get('CallStatus')
     print "Hang up status: ",call_status
