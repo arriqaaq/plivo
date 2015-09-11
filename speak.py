@@ -1,14 +1,14 @@
 from flask import Flask, request, Response
 import plivo, plivoxml
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Call
-engine=create_engine('sqlite:///call.db')
-Base.metadata.bind=engine
-DBSession=sessionmaker(bind=engine)
-session=DBSession()
-Yes=1
-No=0
+#from sqlalchemy import create_engine
+#from sqlalchemy.orm import sessionmaker
+#from database_setup import Base, Call
+#engine=create_engine('sqlite:///call.db')
+#Base.metadata.bind=engine
+#DBSession=sessionmaker(bind=engine)
+#session=DBSession()
+#Yes=1
+#No=0
 app = Flask(__name__)
 auth_id = "MANDCZZTUWZDUWNTBHMZ"
 
