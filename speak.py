@@ -3,13 +3,17 @@ import plivo, plivoxml
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Call
+from requests.auth import HTTPBasicAuth
+import requests
 
-Yes=1
-No=0
-Done=-1
+Yes = 1
+No = 0
+Done = -1
 
 app = Flask(__name__)
 auth_id = "MANDCZZTUWZDUWNTBHMZ"
+auth_token = "OTAxYThjNjQzZTZlYWU1ZjkwNjdlNGY1YTEyNjkz"
+p = plivo.RestAPI(auth_id, auth_token)
 body = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3"
 engine=create_engine('sqlite:///call.db')
 Base.metadata.bind=engine
@@ -34,12 +38,12 @@ def forward():
         newCall=Call(name=call_uuid,status=call_status,busy=No)
         session.add(newCall)
         session.commit()
-        #response = plivoxml.Response()
-        #p = response.addPlay(play_url)
-        #ret_resp = make_response(response.to_xml())
-        #ret_resp.headers["Content-Type"] = "text/xml"
-        #print response.to_xml()
-        #return ret_resp
+        response = plivoxml.Response()
+        p = response.addPlay(play_url)
+        ret_resp = make_response(response.to_xml())
+        ret_resp.headers["Content-Type"] = "text/xml"
+        print response.to_xml()
+        return ret_resp
         
     else:
         print "yayyy"    
@@ -68,7 +72,9 @@ def hangup():
     session.add(editedcall)
     session.commit()
     remcall=session.query(Call).filter_by(busy=No).one()
-    requests.post('https://api.plivo.com/v1/Account/{auth_id}/Call/{call_uuid}/').format(auth_id,remcall.call_uuid)
+    url='''https://api.plivo.com/v1/Account/{}/Call/{}/'''.format(auth_id,remcall.call_uuid)
+    #tested with requests that user id and password for the api request are the authi id and token
+    requests.get(url,auth=HTTPBasicAuth(auth_id, auth_token))
     response = plivoxml.Response()
     print response.to_xml()
     return Response(str(response), mimetype='text/xml')
