@@ -35,12 +35,12 @@ def forward():
         newCall=Call(name=call_uuid,status=call_status,busy=No)
         session.add(newCall)
         session.commit()
-        response = plivoxml.Response()
-        p = response.addPlay(play_url)
-        ret_resp = make_response(response.to_xml())
-        ret_resp.headers["Content-Type"] = "text/xml"
-        print response.to_xml()
-        return ret_resp
+        #response = plivoxml.Response()
+        #p = response.addPlay(play_url)
+        #ret_resp = make_response(response.to_xml())
+        #ret_resp.headers["Content-Type"] = "text/xml"
+        #print response.to_xml()
+        #return ret_resp
         
     else:
         print "yayyy"    
