@@ -3,8 +3,9 @@ import plivo, plivoxml
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Call
-#Yes=1
-#No=0
+
+Yes=1
+No=0
 
 app = Flask(__name__)
 auth_id = "MANDCZZTUWZDUWNTBHMZ"
