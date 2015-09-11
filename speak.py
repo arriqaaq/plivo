@@ -29,21 +29,21 @@ def forward():
     checkcalls=session.query(Call).filter_by(busy=Yes).one()
 
 
-    if checkcalls:
-        pass
-    else:
-        print "hello there"
-        newCall=Call(name=call_uuid,status=call_status,busy=Yes)
-        session.add(newCall)
-        session.commit()
-        params = {
+    #if checkcalls:
+     #   pass
+    #else:
+    print "hello there"
+    newCall=Call(name=call_uuid,status=call_status,busy=Yes)
+    session.add(newCall)
+    session.commit()
+    params = {
             'callerId': from_number # The phone number to be used as the caller id. It can be set to the from_number or any custom number.
-        }
-        response = plivoxml.Response()
-        d = response.addDial(**params)
-        d.addNumber(forwarding_number)
-        print response.to_xml()
-        return Response(str(response), mimetype='text/xml')
+    }
+    response = plivoxml.Response()
+    d = response.addDial(**params)
+    d.addNumber(forwarding_number)
+    print response.to_xml()
+    return Response(str(response), mimetype='text/xml')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
