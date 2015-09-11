@@ -1,19 +1,20 @@
 from flask import Flask, request, Response
 import plivo, plivoxml
-#from sqlalchemy import create_engine
-#from sqlalchemy.orm import sessionmaker
-#from database_setup import Base, Call
-#engine=create_engine('sqlite:///call.db')
-#Base.metadata.bind=engine
-#DBSession=sessionmaker(bind=engine)
-#session=DBSession()
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from database_setup import Base, Call
 #Yes=1
 #No=0
+
 app = Flask(__name__)
 auth_id = "MANDCZZTUWZDUWNTBHMZ"
 
 @app.route("/forward/", methods=['GET','POST'])
 def forward():
+    engine=create_engine('sqlite:///call.db')
+    Base.metadata.bind=engine
+    DBSession=sessionmaker(bind=engine)
+    session=DBSession()
 
     # Generate a Dial XML to forward an incoming call.
 
