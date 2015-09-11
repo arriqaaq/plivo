@@ -6,6 +6,7 @@ from database_setup import Base, Call
 
 Yes=1
 No=0
+Done=-1
 
 app = Flask(__name__)
 auth_id = "MANDCZZTUWZDUWNTBHMZ"
@@ -33,6 +34,13 @@ def forward():
         newCall=Call(name=call_uuid,status=call_status,busy=No)
         session.add(newCall)
         session.commit()
+        body = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3"
+        r = plivoxml.Response()
+        p = r.addPlay(play_url, loop = True)
+        ret_resp = make_response(r.to_xml())
+        ret_resp.headers["Content-Type"] = "text/xml"
+        print r.to_xml()
+        return ret_resp
         
     else:
         print "yayyy"    
@@ -47,6 +55,24 @@ def forward():
         d.addNumber(forwarding_number)
         print response.to_xml()
         return Response(str(response), mimetype='text/xml')
+
+@app.route("/hangup/", methods=['GET','POST'])
+def hangup():
+    from_number = request.args.get('From')
+    call_status = request.args.get('CallStatus')
+    print "Hang up status: ",call_status
+    call_uuid = request.args.get('CallUUID')
+    print "Call UUID is : %s " % (call_uuid)
+    editedcall=session.query(Call).filter_by(name=call_uuid).one()
+    editedcall.status=call_status
+    editedcall.busy=Done
+    session.add(editedcall)
+    session.commit()
+    remcall=session.query(Call).filter_by(busy=No).one()
+    requests.post('https://api.plivo.com/v1/Account/{auth_id}/Call/{call_uuid}/').format(auth_id,remcall.call_uuid)
+    response = plivoxml.Response()
+    print response.to_xml()
+    return Response(str(response), mimetype='text/xml')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
