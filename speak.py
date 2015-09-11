@@ -25,12 +25,15 @@ def forward():
     from_number = request.args.get('From')
     call_uuid = request.args.get('CallUUID')
     call_status = request.args.get('CallStatus')
-    forwarding_number = "2222222222"
+    forwarding_number = "919092937238"
 
-    #checkcalls=session.query(Call).filter_by(busy=Yes).one()
-    n=1
-    if n==0:
-        pass
+    checkcalls=session.query(Call).filter_by(busy=Yes).first()
+
+    if checkcalls:
+        newCall=Call(name=call_uuid,status=call_status,busy=No)
+        session.add(newCall)
+        session.commit()
+        
     else:
         print "yayyy"    
         newCall=Call(name=call_uuid,status=call_status,busy=Yes)
