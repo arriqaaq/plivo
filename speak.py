@@ -58,6 +58,10 @@ def forward():
 
 @app.route("/hangup/", methods=['GET','POST'])
 def hangup():
+    engine=create_engine('sqlite:///call.db')
+    Base.metadata.bind=engine
+    DBSession=sessionmaker(bind=engine)
+    session=DBSession()    
     from_number = request.args.get('From')
     call_status = request.args.get('CallStatus')
     print "Hang up status: ",call_status
