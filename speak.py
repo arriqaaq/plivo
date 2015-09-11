@@ -10,6 +10,7 @@ Done=-1
 
 app = Flask(__name__)
 auth_id = "MANDCZZTUWZDUWNTBHMZ"
+body = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3"
 
 @app.route("/forward/", methods=['GET','POST'])
 def forward():
@@ -34,13 +35,12 @@ def forward():
         newCall=Call(name=call_uuid,status=call_status,busy=No)
         session.add(newCall)
         session.commit()
-#        body = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3"
- #       r = plivoxml.Response()
-  #      p = r.addPlay(play_url, loop = True)
-   #     ret_resp = make_response(r.to_xml())
-    #    ret_resp.headers["Content-Type"] = "text/xml"
-     #   print r.to_xml()
-      #  return ret_resp
+        response = plivoxml.Response()
+        p = response.addPlay(play_url)
+        ret_resp = make_response(response.to_xml())
+        ret_resp.headers["Content-Type"] = "text/xml"
+        print response.to_xml()
+        return ret_resp
         
     else:
         print "yayyy"    
