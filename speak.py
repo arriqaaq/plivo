@@ -27,9 +27,9 @@ def forward():
     call_status = request.args.get('CallStatus')
     forwarding_number = "2222222222"
 
-    checkcalls=session.query(Call).filter_by(busy=Yes).one()
-
-    if checkcalls:
+    #checkcalls=session.query(Call).filter_by(busy=Yes).one()
+    n=1
+    if n==0:
         pass
     else:
         print "yayyy"    
