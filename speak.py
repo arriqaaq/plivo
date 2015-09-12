@@ -39,7 +39,7 @@ def forward():
         session.add(newCall)
         session.commit()
         response = plivoxml.Response()
-        p = response.addPlay(play_url)
+        p = response.addPlay(body,loop=True)
         ret_resp = make_response(response.to_xml())
         ret_resp.headers["Content-Type"] = "text/xml"
         print response.to_xml()
@@ -78,6 +78,14 @@ def hangup():
     response = plivoxml.Response()
     print response.to_xml()
     return Response(str(response), mimetype='text/xml')
+
+#Tried this method for transferring call too
+#params = {
+#        'call_uuid' : 'XXXXXXXXXXXXXXX',
+#        'transfer_url': 'http:example.com/transfer_url',
+#        }
+#response = p.transfer_call(params)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
